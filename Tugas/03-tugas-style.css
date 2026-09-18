@@ -20,6 +20,7 @@ body {
   color: #1a1a1a;
 }
 
+
 .media-card {
   background-color: #ffffff;
   max-width: 600px;
@@ -82,10 +83,20 @@ body {
   width: 100%;
 }
 
+
 .media-card--featured {
     border: 1px solid #0056b3;
 } 
 
 .media-card--featured .media-card__title {
     color: #0056b3;
+}
+
+
+.media-card--featured .media-card__description {
+    color: #0056b3;
+    font-style: italic;
+    border-left: 3px solid #0056b3;
+    padding-left:12px;
+    background-color: #eef5ff;
 }
