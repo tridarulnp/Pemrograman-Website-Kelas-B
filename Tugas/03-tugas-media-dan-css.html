@@ -12,3 +12,15 @@
 
    <article class="media-card">
 
+      <picture class="media-card_cover"> 
+        <source media="(min-width: 700px)" srcset="assets/images/cover-desktop.webp" type="image/webp"> 
+        <source media="(max-width: 699px)" srcset="assets/images/cover-mobile.webp" type="image/webp">
+        <img src="assets/images/cover-fallback.jpg" alt="Ilustrasi sampul materi Dasar Client-Side Logic">
+      </picture> 
+
+      <div class="media-card__content">
+      <h2 class="media-card__title">Video Ajar: Dasar Client-Side Logic</h2>
+      <p class="media-card__description">
+        Materi video di atas menjelaskan bagaimana browser memproses berkas
+        JavaScript secara asinkronus setelah DOM Tree terbentuk.
+      </p>
