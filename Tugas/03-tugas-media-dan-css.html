@@ -42,3 +42,29 @@
         </audio>
         </div>
     </article> 
+
+
+
+    <article class="media-card media-card--featured">
+        <picture class="media-card__cover"> 
+            <source media="(min-width: 700px)" srcset="assets/images/cover-desktop.webp" type="image/webp"> 
+            <source media="(max-width: 699px)" srcset="assets/images/cover-mobile.webp" type="image/webp">
+            <img src="assets/images/cover-fallback.jpg" alt="Ilustrasi sampul materi CSS Box Model">
+        </picture> 
+    
+        <div class="media-card__content">
+        <h2 class="media-card__title">Video Ajar: CSS Box Model &amp; Spesifitas</h2>
+        <p class="media-card__description">
+            Kartu ini berstatus <strong>featured</strong>. Selector gabungan
+            <code>.media-card--featured .media-card__description</code> memiliki
+            spesifitas (0,0,2,0) sehingga menimpa gaya deskripsi bawaan
+            (0,0,1,0) tanpa perlu <code>!important</code>.
+        </p> 
+    
+        <video class="media-card__video" controls poster="assets/videos/poster.jpg">
+            <source src="assets/videos/demo.webm" type="video/webm">
+            <source src="assets/videos/demo.mp4" type="video/mp4">
+            Browser Anda tidak mendukung pemutar video HTML5 natif. 
+            Silakan <a href="assets/videos/demo.mp4">unduh berkas ini</a>.
+         </video>
+    
