@@ -34,4 +34,51 @@ body {
 .media-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+} 
+
+.media-card__cover {
+  display: block;
+  width: 100%;
 }
+
+.media-card__cover img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  max-height: 280px;
+}
+
+.media-card__content {
+  padding: 20px 24px 28px 24px;
+}
+
+.media-card__title {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+}
+
+.media-card__description {
+  font-size: 0.98rem;
+  color: #4a4a4a;
+  margin-bottom: 18px;
+}
+
+.media-card__video {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 18px;
+  background-color: #000;
+}
+
+.media-card__audio-label {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+}
+
+.media-card__audio {
+  width: 100%;
+}
+
