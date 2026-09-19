@@ -51,3 +51,209 @@ body {
     -webkit-font-smoothing: antialiased;
     font-size: 15px;
 }
+
+
+.site-header {
+    background-color: var(--brand-navy);
+    color: #fff;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.main-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0.6rem 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.nav-brand-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 42px;
+}
+
+.brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    color: #fff;
+}
+
+.brand-badge {
+    background-color: var(--brand-primary);
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 0.18rem 0.5rem;
+    border-radius: var(--radius-sm);
+    color: #fff;
+    white-space: nowrap;
+}
+
+.brand-title {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+    white-space: nowrap;
+}
+
+.nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .2);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    padding: 7px 6px;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+}
+
+.nav-toggle:hover {
+    background: rgba(255, 255, 255, .18);
+}
+
+.hamburger-bar {
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+    display: block;
+}
+
+.nav-toggle.active .hamburger-bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle.active .hamburger-bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.nav-toggle.active .hamburger-bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-links {
+    display: none;
+    flex-direction: column;
+    list-style: none;
+    gap: 0.2rem;
+    padding: 0.6rem 0 0.25rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, .12);
+}
+
+.nav-links.show {
+    display: flex;
+    animation: fadeInMenu 0.2s ease;
+}
+
+@keyframes fadeInMenu {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.nav-links li {
+    list-style: none;
+}
+
+.nav-links a,
+.nav-item-link {
+    display: block;
+    color: rgba(255, 255, 255, .85);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.5rem 0.8rem;
+    border-radius: var(--radius-sm);
+    transition: background 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+.nav-links a:hover,
+.nav-item-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .12);
+}
+
+.nav-links a.active {
+    color: #fff;
+    background-color: var(--brand-primary);
+    font-weight: 600;
+}
+
+/* 3. Breadcrumb */
+.breadcrumb-wrapper {
+    max-width: 1400px;
+    margin: 0.85rem auto 0;
+    padding: 0 1rem;
+}
+
+.app-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    padding: 0.55rem 0.9rem;
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    gap: 0.3rem;
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+}
+
+.breadcrumb-item {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.breadcrumb-item+.breadcrumb-item::before {
+    content: "/";
+    padding-right: 0.35rem;
+    color: #94a3b8;
+}
+
+.breadcrumb-item a {
+    color: var(--brand-primary);
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-primary);
+    font-weight: 600;
+}

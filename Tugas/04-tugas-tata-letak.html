@@ -20,3 +20,56 @@
 </head>
 
 <body>
+
+
+
+    <header class="site-header">
+        <nav class="main-nav" aria-label="Navigasi Utama Portal">
+
+            <div class="nav-brand-wrapper">
+                <a href="#" class="brand-link" data-page="beranda" aria-label="Halaman Beranda Portal Jurnal">
+                    <span class="brand-badge">JURNAL</span>
+                    <span class="brand-title">Fakultas Teknik</span>
+                </a>
+
+                <button type="button" class="nav-tonggle" id="navToggle" aria-label="Buka menu navigasi"
+                    aria-expanded="false" aria-controls="navLinksMenu">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
+        </div>
+
+        <ul class="nav-links" id="navLinksMenu" role="menubar">
+           <li role="none"><a href="#beranda" data-page="beranda" class="nav-item-link-active"
+                   role="menuitem">Beranda</a></li>
+            <li role="none"><a href="#arsip" data-page="arsip" class="nav-item-link" role="menuitem">Arsip Edisi</a>
+            </li>
+            <li role="none"><a href="#panduan" data-page="panduan" class="nav-item-link" role="menuitem">Petunjuk
+                    Penulis</a></li>
+            <li role="none"><a href="#redaksi" data-page="redaksi" class="nav-item-link" role="menuitem">Dewan
+                    Redaksi</a></li>
+            <li role="none"><a href="#kontak" data-page="kontak" class="nav-item-link" role="menuitem">Kontak</a>
+                </li>
+            </ul>
+
+        </nav>
+    </header>
+    
+
+<div class="breadcrumb-wrapper">
+    <nav aria-label="Jalur Navigasi">
+        <ol class="app-breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#" data-page="beranda" class="spa-crumb">Beranda</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="#" data-page="beranda" class="spa-crumb">Fakultas Teknik</a>
+            </li>
+            <li class="breadcrumb-item active" id="breadcrumbActivePage" aria-current="page">
+                Portal Jurnal Terkini
+            </li>
+        </ol>
+    </nav>
+</div>   
+        
