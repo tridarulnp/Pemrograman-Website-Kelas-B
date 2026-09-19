@@ -608,4 +608,27 @@ body {
     color: var(--text-muted);
     font-weight: 500;
     font-size: 0.78rem;
+} 
+
+.read-btn {
+    font-size: 0.75rem !important;
+    font-weight: 600;
+    padding: 0.32rem 0.7rem !important;
+    border-radius: var(--radius-sm) !important;
+    white-space: nowrap;
+    background-color: var(--brand-primary) !important;
+    color: #fff !important;
+    border: none !important;
+    transition: background 0.15s ease, transform 0.15s ease;
 }
+
+.read-btn:hover {
+    background-color: var(--brand-primary-hover) !important;
+    transform: translateY(-1px);
+}
+
+.border-card {
+    border-color: var(--border-subtle) !important;
+} 
+
+
