@@ -334,4 +334,61 @@ body {
     padding: 0.12rem 0.45rem;
     border-radius: var(--radius-pill);
     width: fit-content;
+} 
+
+
+.category-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0;
+    margin: 0;
+}
+
+.cat-item {
+    display: block;
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    transition: all 0.15s ease;
+    cursor: pointer;
+}
+
+.cat-item:hover {
+    color: var(--brand-primary);
+    background-color: var(--brand-primary-subtle);
+}
+
+.cat-item.active {
+    color: var(--brand-primary);
+    background-color: var(--brand-primary-subtle);
+    font-weight: 700;
+    border-left: 3px solid var(--brand-primary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.indexation-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.badge-item {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--brand-primary);
+    background-color: #f1f5f9;
+    border: 1px solid var(--border-subtle);
+    padding: 0.22rem 0.5rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.badge-item:hover {
+    background-color: var(--brand-primary-subtle);
 }
