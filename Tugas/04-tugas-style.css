@@ -631,4 +631,8 @@ body {
     border-color: var(--border-subtle) !important;
 } 
 
-
+.rightbar-column {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
