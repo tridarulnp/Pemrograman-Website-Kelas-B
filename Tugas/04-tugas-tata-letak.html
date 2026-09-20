@@ -572,10 +572,201 @@
         <button type="button" class="toast-close" id="toastCloseBtn" aria-label="Tutup Notifikasi">&times;</button>
     </aside>
 
-    <!-- Footer -->
+   
     <footer class="site-footer">
         <div class="footer-container">
             <p class="mb-0">&copy; 2026 Fakultas Teknik Universitas Hasanuddin. Hak Cipta Dilindungi.</p>
             <p class="footer-subtext mb-0">Dikelola oleh Unit Publikasi Ilmiah &bull; Modul 4 Pemrograman Web</p>
         </div>
     </footer>
+ 
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            
+            const navToggle = document.getElementById('navToggle');
+            const navLinksMenu = document.getElementById('navLinksMenu');
+
+            if (navToggle && navLinksMenu) {
+                navToggle.addEventListener('click', function () {
+                    const isOpen = navLinksMenu.classList.toggle('show');
+                    navToggle.classList.toggle('active', isOpen);
+                    navToggle.setAttribute('aria-expanded', isOpen);
+                });
+            }
+
+          
+            const pageViews = document.querySelectorAll('.page-view');
+            const breadcrumbActive = document.getElementById('breadcrumbActivePage');
+
+            const pageTitles = {
+                beranda: 'Portal Jurnal Terkini',
+                arsip: 'Arsip Edisi & Volume',
+                panduan: 'Petunjuk Penulis & Submisi',
+                redaksi: 'Dewan Redaksi & Penelaah',
+                kontak: 'Sekretariat & Kontak'
+            };
+
+            function navigateToPage(pageId) {
+                if (!pageTitles[pageId]) pageId = 'beranda';
+
+                pageViews.forEach(function (view) {
+                    view.classList.toggle('active', view.id === 'view-' + pageId);
+                });
+
+                document.querySelectorAll('.nav-links a[data-page]').forEach(function (link) {
+                    link.classList.toggle('active', link.getAttribute('data-page') === pageId);
+                });
+
+                if (breadcrumbActive) {
+                    breadcrumbActive.textContent = pageTitles[pageId];
+                }
+
+                if (navLinksMenu && navLinksMenu.classList.contains('show')) {
+                    navLinksMenu.classList.remove('show');
+                    if (navToggle) {
+                        navToggle.classList.remove('active');
+                        navToggle.setAttribute('aria-expanded', 'false');
+                    }
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            document.querySelectorAll('[data-page]').forEach(function (el) {
+                el.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const page = this.getAttribute('data-page');
+                    if (page) navigateToPage(page);
+                });
+            });
+
+          
+            const catItems = document.querySelectorAll('.cat-item');
+            const articleCards = document.querySelectorAll('.article-card');
+
+            catItems.forEach(function (item) {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    catItems.forEach(function (c) { c.classList.remove('active'); });
+                    this.classList.add('active');
+
+                    navigateToPage('beranda');
+
+                    const selected = this.getAttribute('data-category');
+
+                    articleCards.forEach(function (card) {
+                        const cardCat = card.getAttribute('data-cat');
+                        const show = (selected === 'all' || cardCat === selected);
+                        card.style.display = show ? '' : 'none';
+                    });
+                });
+            });
+
+            
+            const articleData = {
+                '1': {
+                    title: 'Penerapan Model Transformer untuk Klasifikasi Sentimen Multibahasa pada Media Sosial',
+                    category: 'Kecerdasan Buatan',
+                    author: 'Tri Darul Nurul Pratiwi, Prof. Hendra Wijaya',
+                    issue: 'Vol. 8 No. 2 (2026)',
+                    abstract: 'Penelitian ini mengevaluasi arsitektur deep learning Transformer berukuran ringkas (MiniLM & RoBERTa) dalam memetakan polaritas opini publik daerah secara akurat dengan latensi rendah. Hasil eksperimen pada dataset 50.000 korpus komentar media sosial menunjukkan akurasi rata-rata sebesar 94,2% dengan waktu inferensi 14ms per kalimat.',
+                    keywords: 'Transformer, Sentimen Multibahasa, Media Sosial, Deep Learning, NLP'
+                },
+                '2': {
+                    title: 'Analisis Evaluasi Tata Kelola TI Menggunakan COBIT 2019 pada Layanan Akademik Kampus',
+                    category: 'Sistem Informasi',
+                    author: 'Siti Rahmawati, M.Kom., Budi Prasetyo, M.T.',
+                    issue: 'Vol. 8 No. 2 (2026)',
+                    abstract: 'Investigasi empiris terhadap tingkat kapabilitas dan keselarasan teknologi informasi dengan target strategis operasional universitas negeri. Menggunakan kerangka COBIT 2019 fokus domain EDM02 dan APO12, diperoleh capability level rata-rata 3,4 dari target level 4,0.',
+                    keywords: 'Tata Kelola TI, COBIT 2019, Capability Level, Layanan Akademik'
+                },
+                '3': {
+                    title: 'Optimalisasi Kinerja Jamstack dengan Dynamic Isomorphic Rendering pada Portal Edukasi',
+                    category: 'Rekayasa Web',
+                    author: 'Budi Prasetyo, M.T., Nadia Safitri, M.Sc.',
+                    issue: 'Vol. 8 No. 2 (2026)',
+                    abstract: 'Mempercepat First Contentful Paint (FCP) dan Time to Interactive (TTI) hingga 42% melalui arsitektur decoupled serverless modern berbasis Jamstack dan Isomorphic hydration rendering pada antarmuka web edukasi berskala masif.',
+                    keywords: 'Jamstack, Isomorphic Rendering, Web Performance, Core Web Vitals'
+                },
+                '4': {
+                    title: 'Deteksi Intrusi Jaringan Zero-Day Berbasis Anomaly Scoring Menggunakan Ensemble Trees',
+                    category: 'Jaringan & Keamanan',
+                    author: 'Ir. Ahmad Fadhil, Ph.D., Tri Darul Nurul Pratiwi',
+                    issue: 'Vol. 8 No. 1 (2026)',
+                    abstract: 'Studi performa pendeteksian pola serangan tak terduga (Zero-Day) pada lalu lintas jaringan gigabit menggunakan pendekatan ensemble XGBoost dan Isolation Forest dengan false positive rate di bawah 0,8%.',
+                    keywords: 'Intrusion Detection, Zero-Day, Anomaly Scoring, Network Security'
+                },
+                '5': {
+                    title: 'Simulasi Dinamika Fluida Komputasi untuk Prediksi Dispersi Polutan Udara Perkotaan',
+                    category: 'Sains Komputasi',
+                    author: 'Prof. Hendra Wijaya, Siti Rahmawati, M.Kom.',
+                    issue: 'Vol. 8 No. 1 (2026)',
+                    abstract: 'Pemodelan numerik aliran turbulen menggunakan algoritma Navier-Stokes paralel berbasis GPU OpenCL untuk memetakan konsentrasi emisi partikulat PM2.5 di kawasan padat lalu lintas perkotaan secara real-time.',
+                    keywords: 'CFD, Navier-Stokes, Polutan Udara, Komputasi Paralel, GPU'
+                },
+                '6': {
+                    title: 'Analisis Usabilitas Antarmuka Pembelajaran Adaptif Berbasis Pengukuran Cognitive Load',
+                    category: 'Interaksi Manusia & Komputer',
+                    author: 'Nadia Safitri, S.Kom., M.Sc., Ir. Ahmad Fadhil, Ph.D.',
+                    issue: 'Vol. 8 No. 1 (2026)',
+                    abstract: 'Evaluasi pengalaman pengguna multimodal untuk mereduksi beban kerja kognitif mahasiswa pada perkuliahan daring interaktif melalui uji NASA-TLX dan eye-tracking analytics.',
+                    keywords: 'HCI, Usability, Cognitive Load, NASA-TLX, Adaptive Learning'
+                }
+            };
+
+            const articleModalEl = document.getElementById('articleModal');
+            let articleModal = null;
+
+            if (typeof bootstrap !== 'undefined' && articleModalEl) {
+                articleModal = new bootstrap.Modal(articleModalEl);
+            }
+
+            document.querySelectorAll('.read-btn').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const id = this.getAttribute('data-article');
+                    const data = articleData[id];
+                    if (!data) return;
+
+                    document.getElementById('articleModalLabel').textContent = data.title;
+                    document.getElementById('modalCategory').textContent = data.category;
+                    document.getElementById('modalAuthor').textContent = data.author;
+                    document.getElementById('modalIssue').textContent = data.issue;
+                    document.getElementById('modalAbstract').textContent = data.abstract;
+                    document.getElementById('modalKeywords').textContent = data.keywords;
+
+                    if (articleModal) articleModal.show();
+                });
+            });
+
+            document.querySelectorAll('.article-link-title').forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-article');
+                    const btn = document.querySelector(`.read-btn[data-article="${id}"]`);
+                    if (btn) btn.click();
+                });
+            });
+
+            
+            const toastClose = document.getElementById('toastCloseBtn');
+            const toastEl = document.getElementById('toast-notif');
+            if (toastClose && toastEl) {
+                toastClose.addEventListener('click', function () {
+                    toastEl.style.display = 'none';
+                });
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>
