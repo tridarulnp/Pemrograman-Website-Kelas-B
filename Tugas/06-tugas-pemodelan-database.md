@@ -78,3 +78,74 @@ Pemberian skema atribut disusun menggunakan konvensi penamaan standar database r
 
 --- 
 
+<!-- 3. Simulasi Normalisasi (UNF -> 1NF -> 2NF -> 3NF) -->
+
+# 3. Metodologi & Simulasi Normalisasi Basis Data
+
+Proses normalisasi dilakukan secara formal dari *Unnormalized Form* (UNF) hingga mencapai *Third Normal Form* (3NF) guna menghilangkan anomali insersi (*insertion anomaly*), penghapusan (*deletion anomaly*), dan pembaruan (*update anomaly*), serta mereduksi redundansi data.
+
+---
+
+### 3.1 Unnormalized Form (UNF)
+Kondisi data mentah (*flat file*) yang merekam transaksi dalam dokumen fisik/formulir peminjaman. Terdapat kelompok data yang berulang (*repeating groups*) pada atribut buku yang dipinjam per transaksi:
+
+```text
+(id_peminjaman, tgl_pinjam, tgl_jatuh_tempo, nim, nama_mahasiswa, jurusan, no_telepon,
+ {id_buku, judul_buku, tahun_terbit, stok, id_penerbit, nama_penerbit, alamat_penerbit, email_penerbit, tgl_kembali, denda})
+```
+
+---
+
+### 3.2 First Normal Form (1NF)
+* **Syarat**: Setiap atribut harus bernilai atomik (tunggal, tidak dapat dipecah lagi), tidak ada duplikasi baris, dan menghilangkan *repeating groups*.
+* **Tindakan**: Mendekomposisi kelompok berulang dengan membentuk **Composite Primary Key** dari `id_peminjaman` dan `id_buku`.
+
+```text
+(id_peminjaman*, id_buku*, tgl_pinjam, tgl_jatuh_tempo, nim, nama_mahasiswa, jurusan, 
+ no_telepon, judul_buku, tahun_terbit, stok, id_penerbit, nama_penerbit, alamat_penerbit, 
+ email_penerbit, tgl_kembali, denda)
+```
+
+---
+
+### 3.3 Second Normal Form (2NF)
+* **Syarat**: Sudah memenuhi kriteria 1NF dan **menghilangkan seluruh Ketergantungan Fungsional Parsial (*Partial Functional Dependency*)**. Setiap atribut non-kunci harus bergantung penuh (*fully functionally dependent*) pada seluruh atribut *primary key* komposit, bukan hanya sebagian.
+
+**Analisis Ketergantungan Fungsional (Functional Dependency Analysis):**
+1. **Parsial ke `id_peminjaman`**:
+   `id_peminjaman` $\to$ `tgl_pinjam`, `tgl_jatuh_tempo`, `nim`, `nama_mahasiswa`, `jurusan`, `no_telepon`
+2. **Parsial ke `id_buku`**:
+   `id_buku` $\to$ `judul_buku`, `tahun_terbit`, `stok`, `id_penerbit`, `nama_penerbit`, `alamat_penerbit`, `email_penerbit`
+3. **Penuh (*Full Dependency*) ke `(id_peminjaman, id_buku)`**:
+   (`id_peminjaman`, `id_buku`) $\to$ `tgl_kembali`, `denda`
+
+**Relasi Hasil Dekomposisi 2NF:**
+* `Peminjaman_Header` (`id_peminjaman`*, `tgl_pinjam`, `tgl_jatuh_tempo`, `nim`, `nama_mahasiswa`, `jurusan`, `no_telepon`)
+* `Buku_Master` (`id_buku`*, `judul_buku`, `tahun_terbit`, `stok`, `id_penerbit`, `nama_penerbit`, `alamat_penerbit`, `email_penerbit`)
+* `Detail_Peminjaman` (`id_peminjaman`**, `id_buku`**, `tgl_kembali`, `denda`)
+
+---
+
+### 3.4 Third Normal Form (3NF)
+* **Syarat**: Sudah memenuhi kriteria 2NF dan **menghilangkan seluruh Ketergantungan Fungsional Transitif (*Transitive Functional Dependency*)**. Atribut non-kunci tidak boleh bergantung pada atribut non-kunci lainnya ($X \to Y \to Z$).
+
+**Identifikasi Ketergantungan Transitif:**
+1. Pada `Peminjaman_Header`:
+   `id_peminjaman` $\to$ `nim` $\to$ (`nama_mahasiswa`, `jurusan`, `no_telepon`)
+   *Atribut identitas mahasiswa bergantung pada `nim`, bukan langsung pada `id_peminjaman`.*
+   $\to$ **Solusi**: Pisahkan ke tabel master **`mahasiswa`** dan sisakan `nim` sebagai Foreign Key di tabel `peminjaman`.
+
+2. Pada `Buku_Master`:
+   `id_buku` $\to$ `id_penerbit` $\to$ (`nama_penerbit`, `alamat_penerbit`, `email_penerbit`)
+   *Atribut profil penerbit bergantung pada `id_penerbit`, bukan langsung pada `id_buku`.*
+   $\to$ **Solusi**: Pisahkan ke tabel master **`penerbit`** dan sisakan `id_penerbit` sebagai Foreign Key di tabel `buku`.
+
+**Skema Relasi Akhir Hasil 3NF (Optimum):**
+1. **`mahasiswa`**: (`nim`*, `nama_mahasiswa`, `jurusan`, `no_telepon`)
+2. **`penerbit`**: (`id_penerbit`*, `nama_penerbit`, `alamat_penerbit`, `email_penerbit`)
+3. **`buku`**: (`id_buku`*, `judul_buku`, `tahun_terbit`, `stok`, `id_penerbit`**)
+4. **`peminjaman`**: (`id_peminjaman`*, `nim`**, `tgl_pinjam`, `tgl_jatuh_tempo`)
+5. **`detail_peminjaman`**: (`id_peminjaman`**, `id_buku`**, `tgl_kembali`, `denda`)
+
+---
+
