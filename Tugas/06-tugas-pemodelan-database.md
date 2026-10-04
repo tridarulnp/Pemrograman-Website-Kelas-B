@@ -221,3 +221,97 @@ Kondisi data mentah (*flat file*) yang merekam transaksi dalam dokumen fisik/for
 
 --- 
 
+<!-- 5. Visualisasi Relasi Kunci (ERD) -->
+
+# 5. Visualisasi Relasi Kunci (Entity Relationship Diagram)
+
+### 5.1 Diagram Relasi Entitas ASCII (Monospace Box Layout)
+> *Catatan: Gunakan mode full width / jendela lebar untuk tampilan optimal.*
+
+```
++------------------------------------+                                +------------------------------------+
+|             PENERBIT               |                                |             MAHASISWA              |
++------------------------------------+                                +------------------------------------+
+| [PK] id_penerbit   : VARCHAR(10)   |                                | [PK] nim           : VARCHAR(15)   |
+|      nama_penerbit : VARCHAR(100)  |                                |      nama_mahasiswa: VARCHAR(100)  |
+|      alamat_penerbit: TEXT         |                                |      jurusan       : VARCHAR(50)   |
+|      email_penerbit : VARCHAR(100) |                                |      no_telepon    : VARCHAR(15)   |
++------------------------------------+                                +------------------------------------+
+                  | 1                                                                    | 1
+                  |                                                                      |
+                  | (1 : N) menerbitkan                                                  | (1 : N) melakukan
+                  |                                                                      |
+                  v N                                                                    v N
++------------------------------------+                                +------------------------------------+
+|               BUKU                 |                                |             PEMINJAMAN             |
++------------------------------------+                                +------------------------------------+
+| [PK] id_buku       : VARCHAR(15)   |                                | [PK] id_peminjaman : VARCHAR(20)   |
+| [FK] id_penerbit   : VARCHAR(10)   |                                | [FK] nim           : VARCHAR(15)   |
+|      judul_buku    : VARCHAR(150)  |                                |      tgl_pinjam    : DATE          |
+|      tahun_terbit  : INT           |                                |      tgl_jatuh_tempo: DATE         |
+|      stok          : INT           |                                +------------------------------------+
++------------------------------------+                                                   | 1
+                  | 1                                                                    |
+                  |                                                                      | (1 : N) memuat
+                  | (1 : N) dicatat pada                                                 |
+                  |                                                                      |
+                  +--------------------------> [ RELASI ] <------------------------------+
+                                                   |
+                                                   v N
+                                 +------------------------------------+
+                                 |         DETAIL_PEMINJAMAN          |
+                                 +------------------------------------+
+                                 | [PK, FK] id_peminjaman: VARCHAR(20)|
+                                 | [PK, FK] id_buku      : VARCHAR(15)|
+                                 |          tgl_kembali  : DATE       |
+                                 |          denda        : DECIMAL    |
+                                 +------------------------------------+
+```
+
+---
+
+### 5.2 Skrip Diagram Relasi Grafis (Format Standard GitHub Mermaid)
+
+```mermaid
+erDiagram
+    MAHASISWA ||--o{ PEMINJAMAN : "melakukan (1:N)"
+    PENERBIT ||--o{ BUKU : "menerbitkan (1:N)"
+    PEMINJAMAN ||--|{ DETAIL_PEMINJAMAN : "memuat (1:N)"
+    BUKU ||--o{ DETAIL_PEMINJAMAN : "dicatat_pada (1:N)"
+
+    MAHASISWA {
+        varchar nim PK "Nomor Induk Mahasiswa"
+        varchar nama_mahasiswa "Nama Lengkap"
+        varchar jurusan "Program Studi"
+        varchar no_telepon "Kontak Mahasiswa"
+    }
+
+    PENERBIT {
+        varchar id_penerbit PK "ID Unik Penerbit"
+        varchar nama_penerbit "Nama Badan Usaha"
+        text alamat_penerbit "Alamat Kantor"
+        varchar email_penerbit "Email Resmi"
+    }
+
+    BUKU {
+        varchar id_buku PK "Kode / ISBN Buku"
+        varchar id_penerbit FK "Relasi ke Penerbit"
+        varchar judul_buku "Judul Karya"
+        int tahun_terbit "Tahun Terbit"
+        int stok "Eksemplar Tersedia"
+    }
+
+    PEMINJAMAN {
+        varchar id_peminjaman PK "Nomor Faktur Peminjaman"
+        varchar nim FK "Relasi ke Mahasiswa"
+        date tgl_pinjam "Tanggal Pinjam"
+        date tgl_jatuh_tempo "Batas Pengembalian"
+    }
+
+    DETAIL_PEMINJAMAN {
+        varchar id_peminjaman PK,FK "Referensi Faktur"
+        varchar id_buku PK,FK "Referensi Buku"
+        date tgl_kembali "Tanggal Fisik Kembali"
+        decimal denda "Denda Keterlambatan"
+    }
+```
