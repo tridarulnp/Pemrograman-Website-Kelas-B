@@ -45,4 +45,66 @@ final class Transaction
     public function getAmount(): float
     {
         return $this->amount;
+    } 
+
+// ## 2 Metode process: deposit, penarikan, dan cek saldo
+    public function process(): float
+    {
+        $this->startSession();
+
+        if (!isset($_SESSION['balance'])) {
+            $_SESSION['balance'] = 0.0;
+        }
+
+        // Dihitung dalam sen (integer) karena float tidak presisi, misalnya 0.3 - 0.1 = 0.19999999999999998
+        $currentCents = self::toCents((float) $_SESSION['balance']);
+        $amountCents = self::toCents($this->amount);
+
+        $newCents = match ($this->type) {
+            'deposit'  => $currentCents + $amountCents,
+            'withdraw' => $this->withdrawFrom($currentCents, $amountCents),
+            default    => throw new InvalidArgumentException(
+                'Jenis transaksi tidak dikenali.'
+            ),
+        };
+
+        $newBalance = $newCents / 100;
+
+        $_SESSION['balance'] = $newBalance;
+        $_SESSION['transactions'][] = [
+            'id'            => $this->id,
+            'type'          => $this->type,
+            'amount'        => $this->amount,
+            'balance_after' => $newBalance,
+            'created_at'    => date('d/m/Y H:i:s'),
+        ];
+
+        return $newBalance;
     }
+
+    private function withdrawFrom(int $currentCents, int $amountCents): int
+    {
+        if ($amountCents > $currentCents) {
+            throw new RuntimeException(sprintf(
+                'Penarikan ditolak: saldo tersisa Rp %s, sedangkan jumlah yang diminta Rp %s.',
+                number_format($currentCents / 100, 2, ',', '.'),
+                number_format($amountCents / 100, 2, ',', '.')
+            ));
+        }
+
+        return $currentCents - $amountCents;
+    }
+
+    private static function toCents(float $value): int
+    {
+        return (int) round($value * 100);
+    }
+
+    private function startSession(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
+// ## 1
+}
