@@ -149,3 +149,75 @@ Kondisi data mentah (*flat file*) yang merekam transaksi dalam dokumen fisik/for
 
 ---
 
+<!-- 4. Susun rancangan tabel akhir dalam format tabel Markdown lengkap dengan tipe data -->
+
+# 4. Spesifikasi Rancangan Skema Fisik (Data Dictionary & DDL Specification)
+
+### 4.1 Tabel: `mahasiswa`
+* **Primary Key**: `nim`
+* **Foreign Key**: -
+
+| Nama Kolom | Tipe Data | Nullability | Default | Constraint / Indeks | Deskripsi & Aturan Bisnis |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `nim` | VARCHAR(15) | NOT NULL | - | **PRIMARY KEY** | Nomor Induk Mahasiswa (kombinasi unik angka & kode prodi). |
+| `nama_mahasiswa` | VARCHAR(100) | NOT NULL | - | - | Nama lengkap mahasiswa sesuai data registrasi akademik. |
+| `jurusan` | VARCHAR(50) | NOT NULL | - | - | Nama program studi/jurusan asal mahasiswa. |
+| `no_telepon` | VARCHAR(15) | NULL | NULL | - | Nomor WhatsApp / kontak seluler aktif untuk reminder. |
+
+---
+
+### 4.2 Tabel: `penerbit`
+* **Primary Key**: `id_penerbit`
+* **Foreign Key**: -
+
+| Nama Kolom | Tipe Data | Nullability | Default | Constraint / Indeks | Deskripsi & Aturan Bisnis |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `id_penerbit` | VARCHAR(10) | NOT NULL | - | **PRIMARY KEY** | Kode identifikasi entitas penerbit (misal: `PUB-001`). |
+| `nama_penerbit` | VARCHAR(100) | NOT NULL | - | - | Nama resmi percetakan / perusahaan penerbitan. |
+| `alamat_penerbit` | TEXT | NULL | NULL | - | Alamat domisili kantor / operasional penerbit. |
+| `email_penerbit` | VARCHAR(100) | NULL | NULL | - | Alamat email resmi untuk korespondensi bibliografi. |
+
+---
+
+### 4.3 Tabel: `buku`
+* **Primary Key**: `id_buku`
+* **Foreign Key**: `id_penerbit` merujuk ke `penerbit(id_penerbit)`
+
+| Nama Kolom | Tipe Data | Nullability | Default | Constraint / Indeks | Deskripsi & Aturan Bisnis |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `id_buku` | VARCHAR(15) | NOT NULL | - | **PRIMARY KEY** | Kode unik ISBN atau barcode katalog perpustakaan. |
+| `id_penerbit` | VARCHAR(10) | NOT NULL | - | **FOREIGN KEY** (ON UPDATE CASCADE ON DELETE RESTRICT) | Referensi ke tabel penerbit buku yang bersangkutan. |
+| `judul_buku` | VARCHAR(150) | NOT NULL | - | - | Judul lengkap katalog buku. |
+| `tahun_terbit` | INT | NOT NULL | - | CHECK (`tahun_terbit` > 1800) | Tahun pencetakan/rilis buku. |
+| `stok` | INT | NOT NULL | 0 | CHECK (`stok` >= 0) | Jumlah eksemplar fisik buku yang tersedia. |
+
+---
+
+### 4.4 Tabel: `peminjaman`
+* **Primary Key**: `id_peminjaman`
+* **Foreign Key**: `nim` merujuk ke `mahasiswa(nim)`
+
+| Nama Kolom | Tipe Data | Nullability | Default | Constraint / Indeks | Deskripsi & Aturan Bisnis |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `id_peminjaman` | VARCHAR(20) | NOT NULL | - | **PRIMARY KEY** | Nomor transaksi peminjaman unik (format: `TRX-YYYY-XXXXX`). |
+| `nim` | VARCHAR(15) | NOT NULL | - | **FOREIGN KEY** (ON UPDATE CASCADE ON DELETE RESTRICT) | Referensi ke data mahasiswa yang meminjam buku. |
+| `tgl_pinjam` | DATE | NOT NULL | CURRENT_DATE | - | Tanggal efektif peminjaman dilakukan. |
+| `tgl_jatuh_tempo` | DATE | NOT NULL | - | CHECK (`tgl_jatuh_tempo` >= `tgl_pinjam`) | Tanggal batas akhir pengembalian tanpa sanksi denda. |
+
+---
+
+### 4.5 Tabel: `detail_peminjaman`
+* **Primary Key**: Composite `(id_peminjaman, id_buku)`
+* **Foreign Key**: 
+  - `id_peminjaman` merujuk ke `peminjaman(id_peminjaman)`
+  - `id_buku` merujuk ke `buku(id_buku)`
+
+| Nama Kolom | Tipe Data | Nullability | Default | Constraint / Indeks | Deskripsi & Aturan Bisnis |
+| :--- | :--- | :---: | :---: | :--- | :--- |
+| `id_peminjaman` | VARCHAR(20) | NOT NULL | - | **COMPOSITE PK, FOREIGN KEY** (ON DELETE CASCADE) | Relasi ke faktur peminjaman induk. |
+| `id_buku` | VARCHAR(15) | NOT NULL | - | **COMPOSITE PK, FOREIGN KEY** (ON DELETE RESTRICT) | Relasi ke eksemplar judul buku yang dipinjam. |
+| `tgl_kembali` | DATE | NULL | NULL | - | Tanggal fisik buku dikembalikan (NULL jika masih dipinjam). |
+| `denda` | DECIMAL(10,2) | NOT NULL | 0.00 | CHECK (`denda` >= 0) | Akumulasi biaya keterlambatan berdasarkan durasi hari. |
+
+--- 
+
