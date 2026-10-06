@@ -345,6 +345,43 @@ try {
                 <button type="submit" class="btn-submit">Kirim Pesan</button>
             </form>
         </div>
+        <!-- Daftar Pesan / Kunjungan -->
+        <div class="card">
+            <h2 class="card-title">Daftar Pesan Masuk</h2>
+            <div class="table-responsive">
+                <?php if (empty($daftarPesan)): ?>
+                    <div class="empty-state">Belum ada data buku tamu yang tercatat.</div>
+                <?php else: ?>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">No</th>
+                                <th style="width: 30%;">Pengirim</th>
+                                <th style="width: 45%;">Pesan</th>
+                                <th style="width: 20%;">Tanggal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($daftarPesan as $index => $row): ?>
+                                <tr>
+                                    <td><?= $index + 1 ?></td>
+                                    <td>
+                                        <div class="meta-nama"><?= htmlspecialchars($row['nama'], ENT_QUOTES, 'UTF-8') ?></div>
+                                        <div class="meta-email"><?= htmlspecialchars($row['email'], ENT_QUOTES, 'UTF-8') ?></div>
+                                    </td>
+                                    <td>
+                                        <div class="meta-pesan"><?= nl2br(htmlspecialchars($row['pesan'], ENT_QUOTES, 'UTF-8')) ?></div>
+                                    </td>
+                                    <td>
+                                        <span class="meta-date"><?= htmlspecialchars($row['tanggal_kirim'], ENT_QUOTES, 'UTF-8') ?></span>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </div>
+        </div>
     </div>
 </body>
 </html>
